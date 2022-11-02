@@ -1,45 +1,30 @@
-# Symfony Docker
+## Входные данные
 
-A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony](https://symfony.com) web framework, with full [HTTP/2](https://symfony.com/doc/current/weblink.html), HTTP/3 and HTTPS support.
+CSV файл со структурой сотрудников компании со следующими полями:
 
-![CI](https://github.com/dunglas/symfony-docker/workflows/CI/badge.svg)
+- ФИО сотрудника
+- ФИО руководителя
 
-## Getting Started
+Иерархия сотрудников может быть многоуровневой, например:
 
-1. If not already done, [install Docker Compose](https://docs.docker.com/compose/install/) (v2.10+)
-2. Run `docker compose build --pull --no-cache` to build fresh images
-3. Run `docker compose up` (the logs will be displayed in the current shell)
-4. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
-5. Run `docker compose down --remove-orphans` to stop the Docker containers.
+Руководитель №1 → Подчинённый №11 → Подчинённый №111 → Подчинённый №1111
 
-## Features
+## Необходимо
 
-* Production, development and CI ready
-* [Installation of extra Docker Compose services](docs/extra-services.md) with Symfony Flex
-* Automatic HTTPS (in dev and in prod!)
-* HTTP/2, HTTP/3 and [Preload](https://symfony.com/doc/current/web_link.html) support
-* Built-in [Mercure](https://symfony.com/doc/current/mercure.html) hub
-* [Vulcain](https://vulcain.rocks) support
-* Native [XDebug](docs/xdebug.md) integration
-* Just 2 services (PHP FPM and Caddy server)
-* Super-readable configuration
+- Реализовать форму загрузки файла
+- Разработать структуру БД для хранения содержимого загруженного файла с сохранением связи “руководитель → подчинённый → подчинённый”
+- При загрузке файла сохранить его содержимое в БД
+- Реализовать страницу для отображения списка сотрудников. Как будет отображаться иерархия остаётся на выбор реализующего
+- Реализовать на странице списка всех сотрудников возможность отображения подчинённых выбранного или введенного в форму фильтрации сотрудника (из примера выше, при поиске подчинённых для №11 должна быть получена иерархия из №111 и №1111)
 
-**Enjoy!**
+## Инструменты и требования
 
-## Docs
-
-1. [Build options](docs/build.md)
-2. [Using Symfony Docker with an existing project](docs/existing-project.md)
-3. [Support for extra services](docs/extra-services.md)
-4. [Deploying in production](docs/production.md)
-5. [Debugging with Xdebug](docs/xdebug.md)
-6. [Using a Makefile](docs/makefile.md)
-7. [Troubleshooting](docs/troubleshooting.md)
-
-## License
-
-Symfony Docker is available under the MIT License.
-
-## Credits
-
-Created by [Kévin Dunglas](https://dunglas.fr), co-maintained by [Maxime Helias](https://twitter.com/maxhelias) and sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
+- Docker
+- Nginx
+- PHP 8
+- Postgres или MySQL
+- Symfony Framework
+- Symfony Forms (для реализации формы загрузки файла и формы-фильтра для списка сотрудников)
+- Любая UI-библиотека для реализации отображения формы загрузки и списка сотрудников (Symfony UX, Admin LTE, Bootstrap, и т.д.)
+- Приложение должно содержать Dockerfile и собираться в виде docker-образа
+- Приложение и БД должны запускаться при помощи docker-compose
